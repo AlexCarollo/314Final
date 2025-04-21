@@ -47,11 +47,9 @@ CREATE TABLE `Customer` (
   `cust_name` varchar(64) NOT NULL,
   `cust_email` varchar(64) DEFAULT NULL,
   `cust_phone` char(10) DEFAULT NULL,
-  `store_id` int NOT NULL,
-  PRIMARY KEY (`cust_id`),
-  KEY `store_id_idx` (`store_id`),
-  CONSTRAINT `customer_store_id` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`cust_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 CREATE TABLE `Customer Address` (
   `cust_id` int NOT NULL,
