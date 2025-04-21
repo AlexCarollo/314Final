@@ -1,4 +1,4 @@
-/*
+
 INSERT INTO Vendor (vend_name, email, phone_number)
 VALUES
 ('Nestlé Foods', 'contact@nestle.com', '8005551001'),
@@ -21,9 +21,9 @@ VALUES
 ('Tillamook Creamery', 'tillamook@support.com', '8005551018'),
 ('Sargento Foods Inc.', 'info@sargento.com', '8005551019'),
 ('Gerber Products Co.', 'contact@gerber.com', '8005551020');
-*/
 
-/*
+
+
 INSERT INTO Vendor (brand_name, vend_id)
 VALUES
 ('Nestlé', 1),
@@ -46,9 +46,9 @@ VALUES
 ('Tillamook', 18),
 ('Sargento', 19),
 ('Gerber', 20);
-*/
 
-/*
+
+
 INSERT INTO BMart (phone_number) VALUES 
 ('8005551000'),
 ('8005551001'),
@@ -100,9 +100,9 @@ INSERT INTO BMart (phone_number) VALUES
 ('8005551047'),
 ('8005551048'),
 ('8005551049');
-*/
 
-/*
+
+
 INSERT INTO `Hours of Operation` (store_id, weekday_op, weekday_cl, weekend_op, weekend_cl)
 VALUES
 (1, '08:00:00', '20:00:00', '10:00:00', '18:00:00'),
@@ -155,9 +155,9 @@ VALUES
 (48, '09:00:00', '22:00:00', '11:00:00', '20:00:00'),
 (49, '08:30:00', '19:30:00', '10:00:00', '18:00:00'),
 (50, '08:00:00', '20:00:00', '09:00:00', '17:00:00');
-*/
 
-/*
+
+
 INSERT INTO `BMart Address` (store_id, addr_line_one, addr_line_two, city, state, country, zip)
 VALUES
 (1, '123 Main St', 'Suite 101', 'Springfield', 'IL', 'USA', '62701'),
@@ -210,9 +210,9 @@ VALUES
 (48, '4545 Redwood St', '', 'Los Angeles', 'CA', 'USA', '90002'),
 (49, '4646 Maple Blvd', '', 'San Francisco', 'CA', 'USA', '94102'),
 (50, '4747 Cedar St', '', 'New York', 'NY', 'USA', '10001');
-*/
 
-/*
+
+
 INSERT INTO `Vendor Address` (vend_id, addr_line_one, addr_line_two, city, state, country, zip) 
 VALUES
 (1, '123 Apple St', 'Suite 101', 'Cupertino', 'CA', 'USA', '95014'),
@@ -236,9 +236,9 @@ VALUES
 (19, '135 Passionfruit Rd', '', 'Denver', 'CO', 'USA', '80201'),
 (20, '864 Melon Ave', '', 'Indianapolis', 'IN', 'USA', '46201');
 
-*/
 
-/*
+
+
 INSERT INTO Customer (cust_id, cust_name, cust_email, cust_phone) VALUES
 (1, 'Mario', 'mario@smashmail.com', '5551230001'),
 (2, 'Luigi', 'luigi@smashmail.com', '5551230002'),
@@ -335,9 +335,9 @@ INSERT INTO Customer (cust_id, cust_name, cust_email, cust_phone) VALUES
 (93, 'Lucina (Alt)', 'lucina_alt@smashmail.com', '5551230093'),
 (94, 'Roy (Alt)', 'roy_alt@smashmail.com', '5551230094'),
 (95, 'Inkling (Boy)', 'inkling_boy@smashmail.com', '5551230095');
-*/
 
-/*
+
+
 INSERT INTO Customer_address (cust_id, addr_line_one, addr_line_two, city, state, country, zip) VALUES
 (1, '100 Mushroom Way', '', 'New York', 'NY', 'USA', '10001'),
 (2, '100 Mushroom Way', '', 'New York', 'NY', 'USA', '10001'),
@@ -434,9 +434,9 @@ INSERT INTO Customer_address (cust_id, addr_line_one, addr_line_two, city, state
 (93, '555 Summit St', '', 'Baltimore', 'MD', 'USA', '21201'),
 (94, '555 Summit St', '', 'Baltimore', 'MD', 'USA', '21201'),
 (95, '99 Yggdrasil Ave', '', 'Kansas City', 'MO', 'USA', '64101');
-*/
 
-/*
+
+
 INSERT INTO `Product Type` (UPC, product_type) VALUES
 ('012000111444', 'Soda'),
 ('012000111444', 'Soft Drink'),
@@ -490,9 +490,9 @@ INSERT INTO `Product Type` (UPC, product_type) VALUES
 ('051500123456', 'Dairy'),
 ('073121234567', 'Canned Goods'),
 ('073121234567', 'Vegetables');
-*/
 
-/*
+
+
 INSERT INTO Inventory (store_id, UPC, sales_price, inv_space, max_inv_space) VALUES
 (1, '012000111444', 2.99, 55, 250),
 (1, '012000123789', 3.49, 40, 200),
@@ -3555,9 +3555,9 @@ INSERT INTO Inventory (store_id, UPC, sales_price, inv_space, max_inv_space) VAL
 (50, '073121234567', 6, 0, 305),
 (50, '073121888777', 10, 0, 290);
 
-*/
 
-/*
+
+
 INSERT INTO Products (
     UPC, product_name, product_size, unit_price, standard_price, source_nation, brand
 ) VALUES
@@ -3620,13 +3620,12 @@ INSERT INTO Products (
 ('051500998877', 'Sargento Provolone Slices', 170, 369, 3, 'USA', 'Sargento'),
 ('073121234567', 'Green Giant Corn Niblets', 400, 229, 13, 'USA', 'Green Giant'),
 ('073121888777', 'Green Giant Broccoli Cuts', 400, 249, 11, 'USA', 'Green Giant');
-*/
 
-/*
+
+
 INSERT INTO `Reorder Requests` (order_status, order_seen, reorder_date, reorder_received_date, store_id, vendor_id) VALUES
 ('Pending', 0, '2025-04-21', NULL, 17, 1),
 ('Pending', 0, '2025-04-21', NULL, 17, 16),
 ('Pending', 0, '2025-04-21', NULL, 17, 10),
 ('Pending', 0, '2025-04-21', NULL, 17, 11),
 ('Pending', 0, '2025-04-21', NULL, 17, 6);
-*/
