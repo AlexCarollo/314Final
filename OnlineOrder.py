@@ -10,12 +10,12 @@ def main():
 
             # Same, but now with a cursor for your SQL work
             try:
-                with cnx.cursor() as cursor:       
+                with cnx.cursor(buffered=True) as cursor:       
                     #Failure cases should be in DMs with jimmy
                     
                     # Step 1: Compile info of customer, store, inventory, and not ordered yet
                     
-                    # List index breakdown: 0 name, 1 cart id, 2 customer id, 3 store id, 4 UPC, 5 quantity, 6 inventory quantity, 7 order processed 
+                    # List index breakdown: 0: name, 1: cart id, 2: customer id, 3: store id, 4: UPC, 5: quantity, 6: inventory quantity, 7: order processed 
                     select_statement = ("SELECT cust_name, "
 	                    "cart_id, `Customer Cart`.cust_id, `Customer Cart`.store_id, `Customer Cart`.UPC, prod_quantity, "
                         "inv_space, order_processed FROM `aajm`.`Customer Cart` "
@@ -72,9 +72,30 @@ def main():
                             cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Order failed due to another product.' WHERE cart_id = %s AND cust_id = %s",
                                            [item[1], item[2]])
                         
+                        
                         for item in failures:
-                            pass
-                    
+                            # State giving none here?? This statement works in workbench.
+                            print(item[3])
+                            state = cursor.execute("SELECT `state` FROM `BMart Address` WHERE store_id = %s;", [item[3]])
+                            print(state)
+
+                            #List index breakdown: 0: store id, 1: city, 2: state, 3: inventory space, 4: upc
+                            cursor.execute("SELECT `BMart Address`.store_id, city, `state`, inv_space, UPC from `BMart Address` "
+	                                        "JOIN Inventory ON `BMart Address`.store_id = Inventory.store_id "
+                                            "WHERE UPC = %s AND state = %s;", [item[4], state])
+                            
+                            # Compiles a list of alternative stores in the same state that carry enough of the requested product.
+                            alt_stores = []
+                            newrow = cursor.fetchone()
+                            while newrow is not None:
+                                if item[5] < newrow[3]:
+                                    alt_stores.append(newrow[1])
+                                newrow = newrow = cursor.fetchone()
+
+                            if len(alt_stores) == 0:
+                                print("There are no stores in ", state, " that carry ", item[5], " of this product.")
+                            else:
+                                print("You can purchase ", item[5], " of this product at these locations: ", alt_stores)
                     
                     
                     
