@@ -70,7 +70,7 @@ CREATE TABLE `Customer Cart` (
   `store_id` int NOT NULL,
   `prod_quantity` int NOT NULL,
   `total_price` int NOT NULL,
-  `successfully_ordered` tinyint NOT NULL DEFAULT '0',
+  `order_processed` tinyint NOT NULL DEFAULT '0',
   PRIMARY KEY (`cart_id`),
   KEY `cart_UPC_idx` (`UPC`),
   KEY `cart_store_idx` (`store_id`),
