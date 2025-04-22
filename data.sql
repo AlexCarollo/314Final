@@ -3629,3 +3629,12 @@ INSERT INTO `Reorder Requests` (order_status, order_seen, reorder_date, reorder_
 ('Pending', 0, '2025-04-21', NULL, 17, 10),
 ('Pending', 0, '2025-04-21', NULL, 17, 11),
 ('Pending', 0, '2025-04-21', NULL, 17, 6);
+
+
+INSERT INTO `Customer Cart` (cart_id, cust_id, UPC, store_id, prod_quantity, total_price, order_processed) VALUES 
+(1,1, '073121888777', 50, 10 , 0, 0),
+(2,1, '073121888777', 49, 10, 100, 1),
+(3,1, '012000111444', 50, 10, 100, 0),
+(4,2, '073121888777', 49, 10, 100, 1),
+(5,3, '016000333222', 49, 10, 20, 1),
+(6,3, '013000999888', 49, 250, 1000, 0);
