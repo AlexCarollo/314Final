@@ -25,9 +25,11 @@ def online_order():
                         "WHERE `Customer Cart`.store_id = `Inventory`.store_id AND `Customer Cart`.cust_id = %s AND order_processed = 0;")
                     
                     print("What is the ID of the customer currently ordering?")
-                    curr_customer = input()
+                    customer = input()
+                    try:
+                        curr_customer = int(customer)
                     # Break out of function if the input is incorrect
-                    if curr_customer is not int:
+                    except:
                         print("Invalid customer!")
                         cnx.rollback()
                         return
@@ -101,7 +103,7 @@ def online_order():
 
                             #List index breakdown: 0: store id, 1: city, 2: state, 3: inventory space, 4: upc
                             cursor.execute("SELECT `BMart Address`.store_id, city, `state`, inv_space, UPC from `BMart Address` "
-	                                        "JOIN Inventory ON `BMart Address`.store_id = Inventory.store_id "
+	                                        "JOIN Invento2ry ON `BMart Address`.store_id = Inventory.store_id "
                                             "WHERE UPC = %s AND state = %s;", [item[4], state])
                             
                             # Compiles a list of alternative stores in the same state that carry enough of the requested product.
