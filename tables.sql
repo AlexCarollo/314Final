@@ -144,7 +144,7 @@ CREATE TABLE `Reorder Requests` (
   `request_id` int NOT NULL AUTO_INCREMENT,
   `order_status` varchar(10) NOT NULL,
   `order_seen` tinyint NOT NULL,
-  `reoder_date` date NOT NULL,
+  `reorder_date` date NOT NULL,
   `reorder_received_date` date DEFAULT NULL,
   `store_id` int NOT NULL,
   `vendor_id` int NOT NULL,
