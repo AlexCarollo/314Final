@@ -69,15 +69,15 @@ CREATE TABLE `Customer Cart` (
   `UPC` char(12) NOT NULL,
   `store_id` int NOT NULL,
   `prod_quantity` int NOT NULL,
-  `total_price` int NOT NULL,
   `order_processed` tinyint NOT NULL DEFAULT '0',
   `order_feedback` text,
   PRIMARY KEY (`cart_id`),
   KEY `cart_UPC_idx` (`UPC`),
   KEY `cart_store_idx` (`store_id`),
   CONSTRAINT `cart_store` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE,
-  CONSTRAINT `cart_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE ON UPDATE RESTRICT
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  CONSTRAINT `cart_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 
