@@ -1,7 +1,7 @@
 import mysql.connector
 from mysql.connector import errorcode
 
-def main():
+def online_order():
     # Try to open the SQL connection...
     try:
 
@@ -24,7 +24,13 @@ def main():
                         # Note that this where clause skips over any already processed order in the cart.
                         "WHERE `Customer Cart`.store_id = `Inventory`.store_id AND `Customer Cart`.cust_id = %s AND order_processed = 0;")
                     
-                    curr_customer = 1
+                    print("What is the ID of the customer currently ordering?")
+                    curr_customer = input()
+                    # Break out of function if the input is incorrect
+                    if curr_customer is not int:
+                        print("Invalid customer!")
+                        cnx.rollback()
+                        return
                     # Executes the select statement on the customer with id curr_customer
                     cursor.execute(select_statement, [curr_customer])
                     
@@ -56,6 +62,7 @@ def main():
                     print("Failures: ")
                     for item in failures:
                         print(item) 
+                    print()
                     
                     #Step 3: If all items checks were successful, print success message to console. Reduce quantity of each item in inventory.
                     if len(failures) == 0:
@@ -114,7 +121,9 @@ def main():
                         for item in failures:
                             cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Order failed: not enough inventory' WHERE cart_id = %s AND cust_id = %s",
                                            [item[1], item[2]])
-                cnx.commit()
+                            
+                # Once the online order is fully processed, commit the changes to the database.
+                #cnx.commit()
                 
             # This code should handle any issues DURING SQL work.
             except mysql.connector.Error as err:
@@ -138,6 +147,8 @@ def main():
         else:
             print(err)
     
+def main():
+    online_order()
 
 if __name__ == "__main__":
     main()
