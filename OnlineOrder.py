@@ -14,13 +14,14 @@ def main():
                     #Failure cases should be in DMs with jimmy
                     
                     # Step 1: Compile info of customer, store, inventory, and not ordered yet
-                    
-                    # List index breakdown: 0: name, 1: cart id, 2: customer id, 3: store id, 4: UPC, 5: quantity, 6: inventory quantity, 7: order processed 
+                    # List index breakdown: 0: name, 1: cart id, 2: customer id, 3: store id, 4: UPC, 5: product name, 6: quantity, 7: inventory quantity, 8: order processed,
                     select_statement = ("SELECT cust_name, "
-	                    "cart_id, `Customer Cart`.cust_id, `Customer Cart`.store_id, `Customer Cart`.UPC, prod_quantity, "
+	                    "cart_id, `Customer Cart`.cust_id, `Customer Cart`.store_id, `Customer Cart`.UPC, product_name, prod_quantity, "
                         "inv_space, order_processed FROM `aajm`.`Customer Cart` "
 	                    "JOIN Customer ON `Customer Cart`.cust_id = `Customer`.cust_id "
                         "JOIN Inventory ON `Customer Cart`.UPC = `Inventory`.UPC "
+                        "JOIN Product ON `Customer Cart`.UPC = Product.UPC "
+                        # Note that this where clause skips over any already processed order in the cart.
                         "WHERE `Customer Cart`.store_id = `Inventory`.store_id AND `Customer Cart`.cust_id = %s AND order_processed = 0;")
                     
                     curr_customer = 1
@@ -37,34 +38,40 @@ def main():
                     # Sorts all items in a cart based on whether the quantity a customer is ordering is less than that store's inventory
                     while row is not None:
                         print(row)
-                        if(row[5] <= row[6]):
+                        if(row[6] <= row[7]):
                             successes.append(row)
                         else:
                             failures.append(row)
 
-                        # Updates the row to "processed" in the database. Line causes error for some reason???
-                        # cursor.execute("UPDATE `Customer Cart` SET order_processed = 1 WHERE cart_id = %s", [row[1]])
                         row = row = cursor.fetchone()
-                        
+                    
+                    # Updates all orders in the current customer's cart to be marked as processed.
+                    cursor.execute("UPDATE `Customer Cart` SET order_processed = 1 WHERE cust_id = %s", [curr_customer])    
+                    
+                    # Success/failure print testing.
                     print("Successes: ")
                     for item in successes:
                         print(item)
                     print()
-                    
                     print("Failures: ")
                     for item in failures:
                         print(item) 
                     
-                    #Step 4: If success, print success message to console. Reduce quantity of each item in inventory
+                    #Step 3: If all items checks were successful, print success message to console. Reduce quantity of each item in inventory.
                     if len(failures) == 0:
-                        for item in successes:
-                            new_inventory = item[6] - item[5]
-                            # Update inventory of store.
-                            cursor.execute("UPDATE `Inventory` SET inv_space = %s WHERE store_id = %s AND UPC = %s;", 
-                                           [new_inventory, item[3], item[4]])
-                            # Update customer's cart to have a success message.
-                            cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Purchase Successful!' WHERE cart_id = %s AND cust_id = %s",
-                                           [item[1], item[2]])
+                        # Edge case for empty cart
+                        if len(successes) == 0:
+                            print("Your cart is empty!")
+                        else:
+                            for item in successes:
+                                new_inventory = item[7] - item[6]
+                                # Update inventory of store.
+                                cursor.execute("UPDATE `Inventory` SET inv_space = %s WHERE store_id = %s AND UPC = %s;", 
+                                            [new_inventory, item[3], item[4]])
+                                # Update customer's cart to have a success message.
+                                cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Purchase Successful!' WHERE cart_id = %s AND cust_id = %s",
+                                            [item[1], item[2]])
+                            print("Order placed!")
                     
                     #Step 4: If failure, tell which items are causing the order to fail. Next, check if any stores in the same state have the inventory
                     else:
@@ -72,12 +79,18 @@ def main():
                             cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Order failed due to another product.' WHERE cart_id = %s AND cust_id = %s",
                                            [item[1], item[2]])
                         
-                        
+                        # Create and print a list of the items that caused the purchase to fail.
+                        bad_items = []
                         for item in failures:
-                            # State giving none here?? This statement works in workbench.
-                            print(item[3])
-                            state = cursor.execute("SELECT `state` FROM `BMart Address` WHERE store_id = %s;", [item[3]])
-                            print(state)
+                            bad_items.append(item[5])
+                        print("Purchase failed due to the following products:", bad_items)
+                        
+                        # Iterate through the failed purchases and give alternative locations if available.
+                        for item in failures:
+                            cursor.execute("SELECT `state` FROM `BMart Address` WHERE store_id = %s;", [item[3]])
+                            s = cursor.fetchone()
+                            state = s[0]
+                            #print(state[0])
 
                             #List index breakdown: 0: store id, 1: city, 2: state, 3: inventory space, 4: upc
                             cursor.execute("SELECT `BMart Address`.store_id, city, `state`, inv_space, UPC from `BMart Address` "
@@ -88,22 +101,19 @@ def main():
                             alt_stores = []
                             newrow = cursor.fetchone()
                             while newrow is not None:
-                                if item[5] < newrow[3]:
+                                if item[6] < newrow[3]:
                                     alt_stores.append(newrow[1])
                                 newrow = newrow = cursor.fetchone()
 
                             if len(alt_stores) == 0:
-                                print("There are no stores in ", state, " that carry ", item[5], " of this product.")
+                                print("There are no stores in", state, "that carry", item[6], item[5])
                             else:
-                                print("You can purchase ", item[5], " of this product at these locations: ", alt_stores)
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
+                                print("You can purchase", item[6], item[5], "at the", alt_stores, "location(s).")
+
+                        # Adds feedback for each failed purchase within the database itself. Done in a seperate for loop to prevent errors.
+                        for item in failures:
+                            cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Order failed: not enough inventory' WHERE cart_id = %s AND cust_id = %s",
+                                           [item[1], item[2]])
                     
                     
             # This code should handle any issues DURING SQL work.
