@@ -3631,6 +3631,55 @@ INSERT INTO `Reorder Requests` (order_status, order_seen, reorder_date, reorder_
 ('Pending', 0, '2025-04-21', NULL, 17, 6);
 
 
+
+INSERT INTO `Customer Cart` (cart_id, cust_id, UPC, store_id, prod_quantity, total_price, order_processed) VALUES 
+(1,1, '073121888777', 50, 10 , 0, 0),
+(2,1, '073121888777', 49, 10, 100, 1),
+(3,1, '012000111444', 50, 10, 100, 0),
+(4,2, '073121888777', 49, 10, 100, 1),
+(5,3, '016000333222', 49, 10, 20, 1),
+(6,3, '013000999888', 49, 250, 1000, 0);
+
+INSERT INTO `Requested Product` (UPC, request_id, quantity) VALUES
+('034567897654',24, 1),
+('036632543210',27,2),
+('025000111333',26,1),
+('028000011234', 21, 1),
+('044000112233',22, 1),
+('040000987123', 23, 1);
+
+INSERT INTO `Reorder Requests` (order_status, order_seen, reorder_date, reorder_received_date, store_id, vendor_id) VALUES
+('Complete', 1, '2025-04-21', NULL, 50, 8),
+('Pending', 1, '2025-04-21', NULL, 50, 8),
+('Pending', 1, '2025-04-21', NULL, 50, 1),
+('Pending', 1, '2025-04-21', NULL, 50, 2),
+('Pending', 1, '2025-04-21', NULL, 50, 10),
+('Pending', 1, '2025-04-21', NULL, 50, 11),
+('Pending', 1, '2025-04-21', NULL, 46, 13);
+
+
+INSERT INTO Product(UPC, product_name, product_size, unit_price, standard_price, source_nation,brand) VALUES
+('000000000000', 'Cheerios Chocolate', 100, 250, 4, 'USA', 'Cheerios');
+
+INSERT INTO Shipments (total_price, date_sent, store_id, request_id, vend_id) VALUES
+(150,'2025-04-22',50,24,11),
+(159,'2025-04-22',50,27,1),
+(149,'2025-04-22',50, 21, 1),
+(149,'2025-04-22',50, 21, 1),
+(308,'2025-04-22',50,22,2),
+(349,'2025-04-22',50, 21, 1),
+(284,'2025-04-22',50,26,13);
+
+INSERT INTO `Shipped Product` (UPC, ship_id, quantity) VALUES
+('025000111333',4,1),
+('034567123456',7,1),
+('036632543210',6,1),
+('028000411111', 5, 1),
+('028000011234',1,1),
+('028000011234',2,2),
+('044000112233',3, 2),
+('025000111333',5,1); 
+
 INSERT INTO `Customer Cart` (cart_id, cust_id, UPC, store_id, prod_quantity, order_processed) VALUES 
 (1,1, '073121888777', 50, 10, 0),
 (2,1, '073121888777', 49, 10, 1),
@@ -3688,3 +3737,4 @@ INSERT INTO `Customer Cart` (cart_id, cust_id, UPC, store_id, prod_quantity, ord
 (54, 10, '051500998877', 43, 75, 0),
 (55, 10, '038000789456', 43, 5, 0),
 (56, 10, '051000665544', 43, 22, 0);
+
