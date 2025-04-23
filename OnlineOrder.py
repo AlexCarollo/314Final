@@ -24,9 +24,6 @@ def main():
                         # Note that this where clause skips over any already processed order in the cart.
                         "WHERE `Customer Cart`.store_id = `Inventory`.store_id AND `Customer Cart`.cust_id = %s AND order_processed = 0;")
                     
-                    print("Which customer is shopping?")
-                    cust_name = input()
-                    print(cust_name)
                     curr_customer = 1
                     # Executes the select statement on the customer with id curr_customer
                     cursor.execute(select_statement, [curr_customer])
@@ -117,8 +114,8 @@ def main():
                         for item in failures:
                             cursor.execute("UPDATE `Customer Cart` SET order_feedback = 'Order failed: not enough inventory' WHERE cart_id = %s AND cust_id = %s",
                                            [item[1], item[2]])
-                    
-                    
+                cnx.commit()
+                
             # This code should handle any issues DURING SQL work.
             except mysql.connector.Error as err:
                 print('Error while executing', cursor.statement, '--', str(err))
@@ -140,10 +137,6 @@ def main():
             print("Database does not exist")
         else:
             print(err)
-            
-    print(cnx is None or not cnx.is_connected())
-
-    print("In theory, the program could do other things here, including loop back and ask the user to try again.")
     
 
 if __name__ == "__main__":
