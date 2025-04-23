@@ -74,9 +74,12 @@ CREATE TABLE `Customer Cart` (
   PRIMARY KEY (`cart_id`),
   KEY `cart_UPC_idx` (`UPC`),
   KEY `cart_store_idx` (`store_id`),
+  KEY `cart cust_id_idx` (`cust_id`),
+  CONSTRAINT `cart cust_id` FOREIGN KEY (`cust_id`) REFERENCES `Customer` (`cust_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `cart_store` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE,
   CONSTRAINT `cart_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
 
 
 
@@ -164,7 +167,7 @@ CREATE TABLE `Shipments` (
   CONSTRAINT `shipment_vendor_id` FOREIGN KEY (`vend_id`) REFERENCES `Vendor` (`vend_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Shpped Product` (
+CREATE TABLE `Shipped Product` (
   `UPC` char(12) NOT NULL,
   `ship_id` int NOT NULL,
   `quantity` int NOT NULL,
