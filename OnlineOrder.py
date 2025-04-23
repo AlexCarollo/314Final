@@ -123,7 +123,7 @@ def online_order():
                                            [item[1], item[2]])
                             
                 # Once the online order is fully processed, commit the changes to the database.
-                #cnx.commit()
+                cnx.commit()
                 
             # This code should handle any issues DURING SQL work.
             except mysql.connector.Error as err:
