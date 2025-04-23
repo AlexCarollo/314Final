@@ -114,7 +114,7 @@ def main():
 
                             #print(dateComplete)
 
-                            cursor.execute('UPDATE Inventory SET inv_space = %s ', [invSpace])
+                            cursor.execute('UPDATE Inventory SET inv_space = %s WHERE store_id = %s AND UPC = %s ', [invSpace,store,resultQ_r[1]])
                             cursor.execute('UPDATE `Reorder Requests` SET order_status = "OverFill", reorder_received_date = %s WHERE request_id = %s ',
                                            [dateComplete, row[1]])
 
@@ -144,7 +144,7 @@ def main():
 
                             #print(dateComplete)
 
-                            cursor.execute('UPDATE Inventory SET inv_space = %s ', [invSpace])
+                            cursor.execute('UPDATE Inventory SET inv_space = %s WHERE store_id = %s AND UPC = %s ', [invSpace,store,resultQ_r[1]])
                             cursor.execute('UPDATE `Reorder Requests` SET order_status = "UnderFill", reorder_received_date = %s WHERE request_id = %s ',
                                            [dateComplete, row[1]])
 
@@ -192,7 +192,7 @@ def main():
 
                             #print(dateComplete)
 
-                            cursor.execute('UPDATE Inventory SET inv_space = %s ', [invSpace])
+                            cursor.execute('UPDATE Inventory SET inv_space = %s WHERE store_id = %s AND UPC = %s ', [invSpace,store,resultQ_r[1]])
                             cursor.execute(
                                 'UPDATE `Reorder Requests` SET order_status = "Complete", reorder_received_date = %s WHERE request_id = %s ',
                                 [dateComplete, row])
