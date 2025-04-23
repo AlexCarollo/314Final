@@ -1,19 +1,19 @@
-DROP TABLE `BMart`;
-DROP TABLE `BMart Address`;
-DROP TABLE `Brand`;
-DROP TABLE `Customer`;
-DROP TABLE `Customer Address`;
-DROP TABLE `Customer Cart`;
-DROP TABLE `Hours of Operation`;
-DROP TABLE `Inventory`;
-DROP TABLE `Product`;
-DROP TABLE `Product Type`;
-DROP TABLE `Reorder Requests`;
-DROP TABLE `Requested Product`;
-DROP TABLE `Shipments`;
 DROP TABLE `Shipped Product`;
-DROP TABLE `Vendor`;
+DROP TABLE Shipments;
+DROP TABLE `BMart Address`;
+DROP TABLE `Hours of Operation`;
+DROP TABLE `Requested Product`;
+DROP TABLE `Reorder Requests`;
+DROP TABLE Inventory;
+DROP TABLE `Product Type`;
+DROP TABLE `Customer Cart`;
+DROP TABLE `Customer Address`;
+DROP TABLE `Customer`;
 DROP TABLE `Vendor Address`;
+DROP TABLE Product;
+DROP TABLE Brand;
+DROP TABLE `Vendor`;
+DROP TABLE BMart;
 
 
 CREATE TABLE `BMart` (
