@@ -69,7 +69,7 @@ CREATE TABLE `Vendor` (
   `email` varchar(64) NOT NULL,
   `phone_number` char(10) NOT NULL,
   PRIMARY KEY (`vend_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Vendor Address` (
   `vend_id` int NOT NULL,
