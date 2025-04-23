@@ -15,7 +15,6 @@ DROP TABLE Brand;
 DROP TABLE `Vendor`;
 DROP TABLE BMart;
 
-
 CREATE TABLE `BMart` (
   `store_id` int NOT NULL AUTO_INCREMENT,
   `phone_number` char(10) NOT NULL,
@@ -34,14 +33,6 @@ CREATE TABLE `BMart Address` (
   CONSTRAINT `bmart_address_id` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Brand` (
-  `brand_name` varchar(50) NOT NULL,
-  `vend_id` int DEFAULT NULL,
-  PRIMARY KEY (`brand_name`),
-  KEY `brand_vendor_id` (`vend_id`),
-  CONSTRAINT `brand_vendor_id` FOREIGN KEY (`vend_id`) REFERENCES `Vendor` (`vend_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 CREATE TABLE `Customer` (
   `cust_id` int NOT NULL AUTO_INCREMENT,
   `cust_name` varchar(64) NOT NULL,
@@ -49,7 +40,6 @@ CREATE TABLE `Customer` (
   `cust_phone` char(10) DEFAULT NULL,
   PRIMARY KEY (`cust_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=96 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
 
 CREATE TABLE `Customer Address` (
   `cust_id` int NOT NULL,
@@ -63,27 +53,6 @@ CREATE TABLE `Customer Address` (
   CONSTRAINT `customer_address_id` FOREIGN KEY (`cust_id`) REFERENCES `Customer` (`cust_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Customer Cart` (
-  `cart_id` int NOT NULL AUTO_INCREMENT,
-  `cust_id` int NOT NULL,
-  `UPC` char(12) NOT NULL,
-  `store_id` int NOT NULL,
-  `prod_quantity` int NOT NULL,
-  `order_processed` tinyint NOT NULL DEFAULT '0',
-  `order_feedback` text,
-  PRIMARY KEY (`cart_id`),
-  KEY `cart_UPC_idx` (`UPC`),
-  KEY `cart_store_idx` (`store_id`),
-  KEY `cart cust_id_idx` (`cust_id`),
-  CONSTRAINT `cart cust_id` FOREIGN KEY (`cust_id`) REFERENCES `Customer` (`cust_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `cart_store` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE,
-  CONSTRAINT `cart_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-
-
-
-
 CREATE TABLE `Hours of Operation` (
   `store_id` int NOT NULL,
   `weekday_op` time NOT NULL,
@@ -94,16 +63,32 @@ CREATE TABLE `Hours of Operation` (
   CONSTRAINT `hours_store_id` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Inventory` (
-  `store_id` int NOT NULL,
-  `UPC` char(12) NOT NULL,
-  `sales_price` int DEFAULT NULL,
-  `inv_space` int NOT NULL,
-  `max_inv_space` int NOT NULL,
-  PRIMARY KEY (`store_id`,`UPC`),
-  KEY `UPC_idx` (`UPC`),
-  CONSTRAINT `inventory_store_id` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `inventory_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE ON UPDATE CASCADE
+CREATE TABLE `Vendor` (
+  `vend_id` int NOT NULL AUTO_INCREMENT,
+  `vend_name` varchar(50) NOT NULL,
+  `email` varchar(64) NOT NULL,
+  `phone_number` char(10) NOT NULL,
+  PRIMARY KEY (`vend_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `Vendor Address` (
+  `vend_id` int NOT NULL,
+  `addr_line_one` varchar(64) NOT NULL,
+  `addr_line_two` varchar(64) DEFAULT NULL,
+  `city` varchar(64) NOT NULL,
+  `state` char(2) NOT NULL,
+  `country` varchar(64) NOT NULL,
+  `zip` char(5) NOT NULL,
+  PRIMARY KEY (`vend_id`),
+  CONSTRAINT `vendor_address_id` FOREIGN KEY (`vend_id`) REFERENCES `Vendor` (`vend_id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `Brand` (
+  `brand_name` varchar(50) NOT NULL,
+  `vend_id` int DEFAULT NULL,
+  PRIMARY KEY (`brand_name`),
+  KEY `brand_vendor_id` (`vend_id`),
+  CONSTRAINT `brand_vendor_id` FOREIGN KEY (`vend_id`) REFERENCES `Vendor` (`vend_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Product` (
@@ -124,6 +109,35 @@ CREATE TABLE `Product Type` (
   `product_type` varchar(45) NOT NULL,
   PRIMARY KEY (`UPC`,`product_type`),
   CONSTRAINT `product_type_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `Customer Cart` (
+  `cart_id` int NOT NULL AUTO_INCREMENT,
+  `cust_id` int NOT NULL,
+  `UPC` char(12) NOT NULL,
+  `store_id` int NOT NULL,
+  `prod_quantity` int NOT NULL,
+  `order_processed` tinyint NOT NULL DEFAULT '0',
+  `order_feedback` text,
+  PRIMARY KEY (`cart_id`),
+  KEY `cart_UPC_idx` (`UPC`),
+  KEY `cart_store_idx` (`store_id`),
+  KEY `cart cust_id_idx` (`cust_id`),
+  CONSTRAINT `cart cust_id` FOREIGN KEY (`cust_id`) REFERENCES `Customer` (`cust_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `cart_store` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE,
+  CONSTRAINT `cart_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+CREATE TABLE `Inventory` (
+  `store_id` int NOT NULL,
+  `UPC` char(12) NOT NULL,
+  `sales_price` int DEFAULT NULL,
+  `inv_space` int NOT NULL,
+  `max_inv_space` int NOT NULL,
+  PRIMARY KEY (`store_id`,`UPC`),
+  KEY `UPC_idx` (`UPC`),
+  CONSTRAINT `inventory_store_id` FOREIGN KEY (`store_id`) REFERENCES `BMart` (`store_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `inventory_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Reorder Requests` (
@@ -151,6 +165,7 @@ CREATE TABLE `Requested Product` (
   CONSTRAINT `requested_product_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+
 CREATE TABLE `Shipments` (
   `ship_id` int NOT NULL AUTO_INCREMENT,
   `total_price` int NOT NULL,
@@ -175,24 +190,4 @@ CREATE TABLE `Shipped Product` (
   KEY `shipped_product_shipment_id_idx` (`ship_id`),
   CONSTRAINT `shipped_product_shipment_id` FOREIGN KEY (`ship_id`) REFERENCES `Shipments` (`ship_id`),
   CONSTRAINT `shipped_product_UPC` FOREIGN KEY (`UPC`) REFERENCES `Product` (`UPC`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `Vendor` (
-  `vend_id` int NOT NULL AUTO_INCREMENT,
-  `vend_name` varchar(50) NOT NULL,
-  `email` varchar(64) NOT NULL,
-  `phone_number` char(10) NOT NULL,
-  PRIMARY KEY (`vend_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
-CREATE TABLE `Vendor Address` (
-  `vend_id` int NOT NULL,
-  `addr_line_one` varchar(64) NOT NULL,
-  `addr_line_two` varchar(64) DEFAULT NULL,
-  `city` varchar(64) NOT NULL,
-  `state` char(2) NOT NULL,
-  `country` varchar(64) NOT NULL,
-  `zip` char(5) NOT NULL,
-  PRIMARY KEY (`vend_id`),
-  CONSTRAINT `vendor_address_id` FOREIGN KEY (`vend_id`) REFERENCES `Vendor` (`vend_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
