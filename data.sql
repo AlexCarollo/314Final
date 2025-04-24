@@ -3671,14 +3671,14 @@ INSERT INTO Shipments (total_price, date_sent, store_id, request_id, vend_id) VA
 (284,'2025-04-22',50,26,13);
 
 INSERT INTO `Shipped Product` (UPC, ship_id, quantity) VALUES
-('025000111333',4,1),
+('028000011234 ',4,1),
 ('034567123456',7,1),
 ('036632543210',6,1),
 ('028000411111', 5, 1),
 ('034567897654',1,1),
 ('028000011234',2,1),
 ('044000112233',3, 2),
-('025000111333',5,1); 
+('044000112233',5,1); 
 
 INSERT INTO `Customer Cart` (cart_id, cust_id, UPC, store_id, prod_quantity, order_processed) VALUES 
 (1,1, '073121888777', 50, 10, 0),
