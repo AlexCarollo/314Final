@@ -228,9 +228,7 @@ def main():
         else:
             print(err)
 
-    print(cnx is None or not cnx.is_connected())
-
-    print("In theory, the program could do other things here, including loop back and ask the user to try again.")
+    
 
 if __name__ == "__main__":
     main()
