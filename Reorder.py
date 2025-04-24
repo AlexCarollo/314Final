@@ -1,15 +1,16 @@
 import mysql.connector
 from mysql.connector import errorcode
+from datetime import datetime, timedelta
 
 def reorder(store_id):
     '''
-    The Reorder function...
+    The Reorder function will check if there is inventory that needs to be reordered,
+    then it will reorder it accordingly
         param: store_id - int identifying the store that is reordering
         return: void
     '''
 
     try:
-
         # This is how "modern" Python wants programmers to do "finally: close"
         with mysql.connector.connect(user='aajm', password='final314', host='cs314.iwu.edu', database='aajm') as cnx:
 
@@ -17,20 +18,58 @@ def reorder(store_id):
             try:
                 with cnx.cursor(buffered=True) as cursor:
                     # Step 1: Check what needs to be reordered
-                    reorder_check_statement = (
-                        "SELECT `Requested Orders`.request_id FROM `Requested Orders` AS req_id WHERE `Requested Orders`.store_id = %s"
-	                    "SELECT "
+                    check_inv = (
+                        "SELECT Inventory.UPC, inv_space, max_inv_space, vend_id FROM Inventory"
+                        "JOIN Product ON Product.UPC = Inventory.UPC"
+                        "JOIN Brand ON Product.brand = brand_name"
+                        "WHERE store_id = %s;"
                     )
 
-                    # Executes the select statement using the store id from the function parameter
-                    # cursor.execute(request_order_statement, [store_id])
+                    # Executes the check for inventory
+                    cursor.execute(check_inv, [store_id])
+
+                    success = []
+                    fail = []
+                    row = cursor.fetchone()
+                    # Sorts all items in a cart based on whether the quantity a customer is ordering is less than that store's inventory
+                    while row is not None:
+                        if(row[1] == row[2]):
+                            success.append(row)
+                        else:
+                            fail.append(row)
+
+                        row = row = cursor.fetchone()
+                    
+                    print(success)
                     
                     # Step 2: Make the request to reorder the needed products
                     # Each successful AND failed item should be recorded, in order to show what needs to be changed about the order
-                    reorder_statement = (
-                        
+                    fetch_current_reorders = (
+                        "SELECT Reorder Requests.request_id, Requested Product.UPC, Requested Product.quantity FROM Reorder Requests"
+                        "JOIN Requested Product ON Reorder Requests.request_id = Requested Product.request_id"
+                        "WHERE Reorder Requests.order_status = 'Pending' AND store_id = %s;"
                     )
-                cnx.commit()
+
+                    cursor.execute(fetch_current_reorders, [store_id])
+
+                    fetch_current_shipments = (
+                        "SELECT Shipments.ship_id, Shipped Product.UPC, Shipped Product.quantity FROM Shipments"
+                        "JOIN Shipped Product ON Shipments.ship_id = Shipped Product.ship_id"
+                        "JOIN Reorder Requests ON Shipments.request_id = Reorder Requests.request_id"
+                        "WHERE Reorder Requests.reorder_received_date = NULL AND Shipments.store_id = %s;"
+                    )
+
+                    cursor.execute(fetch_current_shipments)
+
+                    date = datetime.now()
+                    dateComplete = date.strftime("%Y-%m-%d")
+
+                    add_reorder = (
+                        "INSERT INTO Reorder Requests (order_status, order_seen, reorder_date, reorder_received_date, store_id, vendor_id)"
+                        "VALUE ('Pending', 0, %s, NULL, %s, %s)"
+                    )
+
+                # cnx.commit()
                 
             # This code should handle any issues DURING SQL work.
             except mysql.connector.Error as err:
